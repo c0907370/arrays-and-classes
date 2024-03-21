@@ -1,0 +1,83 @@
+using System;
+
+class Circle
+{
+    public double Radius { get; }
+    public Circle(double radius)
+    {
+        Radius = radius;
+    }
+
+    public double CalculateArea()
+    {
+        return Math.PI * Radius * Radius;
+    }
+
+    public double CalculatePerimeter()
+    {
+        return 2 * Math.PI * Radius;
+    }
+
+    public bool IsPointInsideCircle(double x, double y)
+    {
+        double distanceFromCenter = Math.Sqrt((x * x) + (y * y));
+        return distanceFromCenter <= Radius;
+    }
+}
+
+class CircleHelper
+{
+    public static Circle[] CreateCircles(int count)
+    {
+        Circle[] circles = new Circle[count];
+        for (int i = 0; i < count; i++)
+        {
+            Console.Write($"Enter radius for circle {i + 1}: ");
+            double radius = double.Parse(Console.ReadLine());
+            circles[i] = new Circle(radius);
+        }
+        return circles;
+    }
+
+    public static void PrintCircleInfo(Circle circle)
+    {
+        Console.WriteLine($"Circle with radius {circle.Radius}:");
+        Console.WriteLine($"Area: {circle.CalculateArea():F2}");
+        Console.WriteLine($"Perimeter: {circle.CalculatePerimeter():F2}");
+    }
+
+    public static void CheckPointInCircles(Circle[] circles, double x, double y)
+    {
+        for (int i = 0; i < circles.Length; i++)
+        {
+            bool isInside = circles[i].IsPointInsideCircle(x, y);
+            Console.WriteLine($"Point ({x}, {y}) {(isInside ? "is" : "is not")} inside circle {i + 1}");
+        }
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Console.Write("Enter the number of circles: ");
+        int numCircles = int.Parse(Console.ReadLine());
+
+        Circle[] circles = CircleHelper.CreateCircles(numCircles);
+
+        Console.WriteLine("\nCircle Information:");
+        foreach (var circle in circles)
+        {
+            CircleHelper.PrintCircleInfo(circle);
+            Console.WriteLine();
+        }
+
+        Console.Write("\nEnter coordinates for a point (x y): ");
+        string[] coordinates = Console.ReadLine().Split(' ');
+        double x = double.Parse(coordinates[0]);
+        double y = double.Parse(coordinates[1]);
+
+        CircleHelper.CheckPointInCircles(circles, x, y);
+    }
+}
+
